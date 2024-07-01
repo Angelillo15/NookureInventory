@@ -1,0 +1,70 @@
+<GuiLayout>
+    <Head>
+        <Title tl="true">
+            [green]The[/green][red]Inventory[/red][blue]Title[/blue]
+        </Title>
+        <rows>3</rows>
+    </Head>
+    <Items>
+        {% for i in range(18, 26, 1) %}
+        <Item
+                slot="{{ i }}"
+                material="BLACK_STAINED_GLASS_PANE"
+        >
+            <Name>
+                [red]Stone[/red]
+            </Name>
+            <Lore>
+                <LoreLine>
+                    [red]Magic Stone [/red]
+                </LoreLine>
+                <LoreLine>
+                    [blue]Line 2[/blue]
+                </LoreLine>
+            </Lore>
+            <Actions>
+                <Action
+                        type="CLOSE_INVENTORY"
+                />
+                <Action
+                        type="SEND_MESSAGE"
+                        value="[green]Hello World!"
+                />
+            </Actions>
+        </Item>
+        {% endfor %}
+        <Item
+                id="item-id"
+                slot="2"
+                material="STONE"
+        >
+            <Name>
+                [red]Stone[/red]
+            </Name>
+            <Lore>
+                <LoreLine>
+                    [red]Magic Stone [/red]
+                </LoreLine>
+                <LoreLine>
+                    [blue]Line 2[/blue]
+                </LoreLine>
+            </Lore>
+        </Item>
+        <Item
+                slot="3"
+                material="STONE"
+        >
+            <Name>
+                [red]Magic Stone ✨[/red]
+            </Name>
+            <Lore>
+                <LoreLine>
+                    [red]Magic Stone [/red]
+                </LoreLine>
+                <LoreLine>
+                    [blue]Line 2[/blue]
+                </LoreLine>
+            </Lore>
+        </Item>
+    </Items>
+</GuiLayout>

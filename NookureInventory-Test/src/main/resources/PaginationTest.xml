@@ -1,0 +1,72 @@
+<GuiLayout>
+    <Head>
+        <Title tl="true">
+            [green]The[/green][red]Inventory[/red][blue]Title[/blue]
+        </Title>
+        <rows>6</rows>
+    </Head>
+    <Items>
+        {% set pag = pagination(9, 5, page, materials.size) %}
+        {% for i in range(pag.start, pag.end, 1) %}
+        {% set material = materials[i] %}
+
+        <Item
+                slot="{{ i }}"
+                material="{{ material }}"
+        >
+            <Name>
+                [red]{{ player.name }}[/red]
+            </Name>
+            <Lore>
+                <LoreLine>
+                    [red]Magic Stone [/red]
+                </LoreLine>
+                <LoreLine>
+                    [blue]Line 2[/blue]
+                </LoreLine>
+            </Lore>
+            <Actions>
+                <Action
+                        type="CLOSE_INVENTORY"
+                />
+                <Action
+                        type="SEND_MESSAGE"
+                        value="[green]Hello World!"
+                />
+            </Actions>
+        </Item>
+        {% endfor %}
+        <Item
+                material="PAPER"
+                slot="48"
+        >
+            <Name>
+                [red]Previous Page ✨[/red]
+            </Name>
+            <Lore>
+                <LoreLine>
+                    [red]Magic Stone [/red]
+                </LoreLine>
+                <LoreLine>
+                    [blue]Line 2[/blue]
+                </LoreLine>
+            </Lore>
+        </Item>
+        <Item
+                material="PAPER"
+                slot="50"
+        >
+            <Name>
+                [red]Next Page ✨[/red]
+            </Name>
+            <Lore>
+                <LoreLine>
+                    [red]Magic Stone [/red]
+                </LoreLine>
+                <LoreLine>
+                    [blue]Line 2[/blue]
+                </LoreLine>
+            </Lore>
+        </Item>
+    </Items>
+</GuiLayout>

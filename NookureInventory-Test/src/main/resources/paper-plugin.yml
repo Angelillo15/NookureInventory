@@ -1,0 +1,13 @@
+name: 'NookureInventory-Test'
+main: 'com.nookure.core.inv.Main'
+version: '1.0'
+api-version: '1.19'
+author: 'Nookure'
+description: 'Test Inventory Plugin'
+commands:
+  test:
+    description: 'Test Command'
+    usage: '/test'
+    permission: 'nookure.test'
+    aliases:
+    - 't'
