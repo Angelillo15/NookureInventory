@@ -175,7 +175,7 @@ public class NookureInventoryEngine {
   }
 
 
-  private static Map<String, Object> toMap(Object... context) {
+  public static Map<String, Object> toMap(Object... context) {
     if (context.length % 2 != 0) {
       throw new IllegalArgumentException("Context must be key-value pairs");
     }
@@ -193,6 +193,19 @@ public class NookureInventoryEngine {
     }
 
     return contextMap;
+  }
+
+  public static Object[] toContextObjectArray(Map<String, Object> context) {
+    Object[] contextArray = new Object[context.size() * 2];
+    int i = 0;
+
+    for (Map.Entry<String, Object> entry : context.entrySet()) {
+      contextArray[i] = entry.getKey();
+      contextArray[i + 1] = entry.getValue();
+      i += 2;
+    }
+
+    return contextArray;
   }
 
   /**
