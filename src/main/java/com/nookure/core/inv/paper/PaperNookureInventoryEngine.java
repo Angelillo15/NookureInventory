@@ -72,6 +72,23 @@ public class PaperNookureInventoryEngine extends NookureInventoryEngine implemen
         throw new RuntimeException(e);
       }
 
+      String permission = guiLayout.head().permission();
+      String permissionMessage = guiLayout.head().noPermissionMessage();
+
+      if (permissionMessage == null) {
+        permissionMessage = "<red>You do not have permission to open this inventory";
+      }
+
+      if (permission != null && !player.hasPermission(permission)) {
+        if (ServerUtils.isPaper) {
+          player.sendMessage(i18nAdapter.translateComponent(permissionMessage));
+        } else {
+          player.sendMessage(i18nAdapter.translate(permissionMessage));
+        }
+
+        return;
+      }
+
       Bukkit.getScheduler().runTask(plugin, () -> {
         player.openInventory(
             new InventoryContainer(
