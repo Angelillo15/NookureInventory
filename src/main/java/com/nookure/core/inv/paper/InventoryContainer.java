@@ -35,8 +35,6 @@ public class InventoryContainer implements InventoryHolder {
   private final InventoryOpener<Player> opener;
   private final GuiMetadata metadata;
   private final CustomActionRegistry customActionRegistry = Bukkit.getServicesManager().load(CustomActionRegistry.class);
-
-
   private final Map<String, Item> itemsById = new HashMap<>();
 
   @SuppressWarnings("deprecation")
