@@ -4,6 +4,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
 
 import javax.inject.Inject;
 
@@ -28,8 +29,12 @@ public class InventoryListener implements Listener {
   public void onInventoryClose(InventoryCloseEvent event) {
     InventoryContainer container = registry.get(event.getPlayer().getUniqueId());
 
-    if (container != null) {
-      registry.unregister(container);
+    Inventory inventory = event.getInventory();
+
+    if (container == null || !(inventory.getHolder(false) == container)) {
+      return;
     }
+
+    registry.unregister(container);
   }
 }
