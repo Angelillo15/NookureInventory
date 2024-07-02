@@ -1,0 +1,62 @@
+{# @pebvariable name="page" type="java.lang.Integer" #}
+{# @pebvariable name="pagination" type="com.nookure.core.inv.template.extension.PaginationItemExtension.PaginationData" #}
+{# @pebvariable name="canNext" type="java.lang.Boolean" #}
+{# @pebvariable name="canPrevious" type="java.lang.Boolean" #}
+{% macro paginationFooter(previousSlot=48, nextSlot=50, page=1, pagination) %}
+{% set canNext = page < pagination.lastPage %}
+{% set canPrevious = page > 1 %}
+        <Item
+                {% if canPrevious %}
+                material="PAPER"
+                {% else %}
+                material="BARRIER"
+                {% endif %}
+                slot="48"
+        >
+            <Name>
+                [red]Previous Page ✨[/red]
+            </Name>
+            <Lore>
+                <LoreLine>
+                    [red]Magic Stone [/red]
+                </LoreLine>
+                <LoreLine>
+                    [blue]Line 2[/blue]
+                </LoreLine>
+            </Lore>
+            {% if canPrevious %}
+            <Actions>
+                <Action
+                  type="PREVIOUS_PAGE"
+                />
+            </Actions>
+            {% endif %}
+        </Item>
+        <Item
+                {% if canNext %}
+                material="PAPER"
+                {% else %}
+                material="BARRIER"
+                {% endif %}
+                slot="50"
+        >
+            <Name>
+                [red]Next Page ✨[/red]
+            </Name>
+            <Lore>
+                <LoreLine>
+                    [red]Magic Stone [/red]
+                </LoreLine>
+                <LoreLine>
+                    [blue]Line 2[/blue]
+                </LoreLine>
+            </Lore>
+            {% if canNext %}
+            <Actions>
+                <Action
+                  type="NEXT_PAGE"
+                />
+            </Actions>
+            {% endif %}
+        </Item>
+{% endmacro %}
