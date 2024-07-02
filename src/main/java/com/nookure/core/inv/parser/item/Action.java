@@ -4,16 +4,16 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 
 public class Action {
   @XmlAttribute(name = "type")
-  private ActionType type;
+  private String type;
 
   @XmlAttribute(name = "value")
   private String value;
 
-  public ActionType type() {
+  public String type() {
     return type;
   }
 
-  public Action setType(ActionType type) {
+  public Action setType(String type) {
     this.type = type;
     return this;
   }
