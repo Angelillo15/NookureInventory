@@ -1,6 +1,5 @@
 package com.nookure.core.inv.exception;
 
-import java.io.PrintWriter;
 import java.util.logging.Logger;
 
 public class UserFriendlyRuntimeException extends RuntimeException {
