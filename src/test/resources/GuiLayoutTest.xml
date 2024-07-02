@@ -1,9 +1,10 @@
 <GuiLayout>
     <Head>
-        <Title tl="true">
+        <title tl="true">
             [green]The[/green][red]Inventory[/red][blue]Title[/blue]
-        </Title>
+        </title>
         <rows>3</rows>
+        <permission>nookure.inventory.test</permission>
     </Head>
     <Items>
         <Item

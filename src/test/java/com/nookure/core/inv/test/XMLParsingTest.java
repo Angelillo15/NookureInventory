@@ -21,6 +21,7 @@ public class XMLParsingTest {
     System.out.println("Title: " + guiLayout.head().title().title());
     System.out.println("Title tl: " + guiLayout.head().title().tl());
     System.out.println("Rows: " + guiLayout.head().rows());
+    System.out.println("Permission: " + guiLayout.head().permission());
 
     for (Item item : guiLayout.items().itemList()) {
       System.out.println("Item ID: " + item.id());
