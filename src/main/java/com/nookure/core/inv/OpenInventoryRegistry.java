@@ -11,12 +11,16 @@ public abstract class OpenInventoryRegistry<T> {
   private final BiMap<UUID, T> registry = HashBiMap.create();
 
   public void register(UUID uuid, T value) {
-    registry.put(uuid, value);
+    synchronized (registry) {
+      registry.put(uuid, value);
+    }
   }
 
   @Nullable
   public T get(UUID uuid) {
-    return registry.get(uuid);
+    synchronized (registry) {
+      return registry.get(uuid);
+    }
   }
 
   @Nullable
