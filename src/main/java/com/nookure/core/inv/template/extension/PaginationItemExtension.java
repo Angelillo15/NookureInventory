@@ -1,4 +1,4 @@
-package com.nookure.core.inv.extension;
+package com.nookure.core.inv.template.extension;
 
 import io.pebbletemplates.pebble.extension.AbstractExtension;
 import io.pebbletemplates.pebble.extension.Function;
@@ -14,7 +14,7 @@ public class PaginationItemExtension extends AbstractExtension implements Functi
     return Map.of("pagination", this);
   }
 
-  public record PaginationData(long start, long end) {}
+  public record PaginationData(long start, long end, int lastPage) {}
 
   @Override
   public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {;
@@ -33,8 +33,9 @@ public class PaginationItemExtension extends AbstractExtension implements Functi
 
     long start = (page - 1) * rows * columns;
     long end = Math.min(start + rows * columns, total) - 1;
+    int lastPage = (int) Math.ceil((double) total / (rows * columns));
 
-    return new PaginationData(start, end);
+    return new PaginationData(start, end, lastPage);
   }
 
   @Override
