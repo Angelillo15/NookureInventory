@@ -31,7 +31,7 @@ public class InventoryContainer implements InventoryHolder {
   private final UUID uuid;
   private final GuiLayout guiLayout;
   private final Inventory inventory;
-  private final I18nAdapter<?> i18nAdapter;
+  private final I18nAdapter<Player> i18nAdapter;
   private final InventoryOpener<Player> opener;
   private final GuiMetadata metadata;
   private final CustomActionRegistry customActionRegistry = Bukkit.getServicesManager().load(CustomActionRegistry.class);
@@ -43,7 +43,7 @@ public class InventoryContainer implements InventoryHolder {
   public InventoryContainer(
       @NotNull Player player,
       @NotNull GuiLayout guiLayout,
-      @NotNull I18nAdapter<?> i18nAdapter,
+      @NotNull I18nAdapter<Player> i18nAdapter,
       @NotNull PaperOpenInventoryRegistry registry,
       @NotNull InventoryOpener<Player> opener,
       @NotNull GuiMetadata metadata
