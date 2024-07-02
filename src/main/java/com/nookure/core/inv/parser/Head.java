@@ -15,6 +15,9 @@ public class Head {
   @XmlElement(name = "permission")
   private String permission;
 
+  @XmlElement(name = "noPermissionMessage")
+  private String noPermissionMessage;
+
   public Title title() {
     return title;
   }
@@ -39,6 +42,15 @@ public class Head {
 
   public Head setPermission(String permission) {
     this.permission = permission;
+    return this;
+  }
+
+  public String noPermissionMessage() {
+    return noPermissionMessage;
+  }
+
+  public Head setNoPermissionMessage(String noPermissionMessage) {
+    this.noPermissionMessage = noPermissionMessage;
     return this;
   }
 }
