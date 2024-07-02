@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -15,7 +16,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaperItemConverter extends ItemConverter<ItemStack> {
+public class PaperItemConverter extends ItemConverter<ItemStack, Player> {
   private static final PaperItemConverter instance = new PaperItemConverter();
   public static final String ID_KEY = "nookureinventory";
   public static final NamespacedKey ITEM_ID = new NamespacedKey(ID_KEY, "item_id");
@@ -30,7 +31,7 @@ public class PaperItemConverter extends ItemConverter<ItemStack> {
 
   @Override
   @SuppressWarnings("deprecation")
-  public ItemStack convert(Item item, I18nAdapter adapter) {
+  public ItemStack convert(Item item, I18nAdapter<Player> adapter) {
     ItemStack itemStack = new ItemStack(Material.valueOf(item.material().toUpperCase()));
     ItemMeta meta = itemStack.getItemMeta();
 
@@ -46,7 +47,14 @@ public class PaperItemConverter extends ItemConverter<ItemStack> {
       if (item.lore() != null) {
         List<Component> lore = new ArrayList<>();
 
-        item.lore().loreLines().forEach(line -> lore.add(adapter.translateComponent(line, item.tl())));
+        if (item.lore().loreLines() != null) {
+          item.lore().loreLines().forEach(line -> lore.add(adapter.translateComponent(line, item.tl())));
+        }
+
+        if (item.literalLore() != null) {
+          item.literalLore().loreLines().forEach(line -> lore.add(adapter.translateComponent(line, item.tl())));
+        }
+
         meta.lore(lore);
       }
     } else {
@@ -56,8 +64,14 @@ public class PaperItemConverter extends ItemConverter<ItemStack> {
 
       if (item.lore() != null) {
         List<String> lore = new ArrayList<>();
+        if (item.lore() != null) {
+          item.lore().loreLines().forEach(line -> lore.add(adapter.translate(line, item.tl())));
+        }
 
-        item.lore().loreLines().forEach(line -> lore.add(adapter.translate(line, item.tl())));
+        if (item.literalLore() != null) {
+          item.literalLore().loreLines().forEach(line -> lore.add(adapter.translate(line, item.tl())));
+        }
+
         meta.setLore(lore);
       }
     }

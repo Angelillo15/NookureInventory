@@ -32,6 +32,9 @@ public class Item {
   @XmlElement(name = "Lore")
   private Lore lore;
 
+  @XmlElement(name = "LiteralLore")
+  private LiteralLore literalLore;
+
   @XmlElement(name = "Actions")
   private Actions actions;
 
@@ -104,6 +107,15 @@ public class Item {
 
   public Item setActions(Actions actions) {
     this.actions = actions;
+    return this;
+  }
+
+  public LiteralLore literalLore() {
+    return literalLore;
+  }
+
+  public Item setLiteralLore(LiteralLore literalLore) {
+    this.literalLore = literalLore;
     return this;
   }
 }

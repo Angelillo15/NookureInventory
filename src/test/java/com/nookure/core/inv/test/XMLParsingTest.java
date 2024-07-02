@@ -11,6 +11,7 @@ import java.io.InputStream;
 
 public class XMLParsingTest {
   private static final InputStream xmlStream = XMLParsingTest.class.getClassLoader().getResourceAsStream("GuiLayoutTest.xml");
+
   @Test
   public void xmlTest() throws JAXBException {
     JAXBContext context = JAXBContext.newInstance(GuiLayout.class);
@@ -28,8 +29,16 @@ public class XMLParsingTest {
       System.out.println("Item Slot: " + item.slot());
       System.out.println("Item Material: " + item.material());
       System.out.println("Item Name: " + item.name());
-      for (String loreLine : item.lore().loreLines()) {
-        System.out.println("Lore Line: " + loreLine);
+
+      if (item.literalLore() != null) {
+        System.out.println("Literal Lore: " + item.literalLore().literalLore());
+        item.literalLore().loreLines().forEach(loreLine -> System.out.println("Lore Line: " + loreLine));
+      } else {
+        if (item.lore().loreLines() == null) continue;
+
+        for (String loreLine : item.lore().loreLines()) {
+          System.out.println("Lore Line: " + loreLine);
+        }
       }
     }
   }
