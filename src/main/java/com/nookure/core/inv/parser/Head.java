@@ -6,11 +6,14 @@ import jakarta.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Head {
-  @XmlElement(name = "Title")
+  @XmlElement(name = "title")
   private Title title;
 
   @XmlElement(name = "rows")
   private int rows;
+
+  @XmlElement(name = "permission")
+  private String permission;
 
   public Title title() {
     return title;
@@ -27,6 +30,15 @@ public class Head {
 
   public Head setRows(int rows) {
     this.rows = rows;
+    return this;
+  }
+
+  public String permission() {
+    return permission;
+  }
+
+  public Head setPermission(String permission) {
+    this.permission = permission;
     return this;
   }
 }
