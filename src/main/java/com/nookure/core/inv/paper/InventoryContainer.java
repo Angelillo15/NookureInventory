@@ -1,7 +1,8 @@
 package com.nookure.core.inv.paper;
 
-import com.nookure.core.inv.I18nAdapter;
+import com.nookure.core.inv.*;
 import com.nookure.core.inv.exception.UserFriendlyRuntimeException;
+import com.nookure.core.inv.paper.service.CustomActionRegistry;
 import com.nookure.core.inv.parser.GuiLayout;
 import com.nookure.core.inv.parser.adapters.MiniMessageAdapter;
 import com.nookure.core.inv.parser.item.Action;
@@ -22,6 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.nookure.core.inv.paper.ServerUtils.isPaper;
+import static com.nookure.core.inv.parser.item.ActionType.*;
 import static java.util.Objects.requireNonNull;
 
 public class InventoryContainer implements InventoryHolder {
@@ -29,8 +31,11 @@ public class InventoryContainer implements InventoryHolder {
   private final UUID uuid;
   private final GuiLayout guiLayout;
   private final Inventory inventory;
-  private final I18nAdapter i18nAdapter;
-  private final PaperOpenInventoryRegistry registry;
+  private final I18nAdapter<?> i18nAdapter;
+  private final InventoryOpener<Player> opener;
+  private final GuiMetadata metadata;
+  private final CustomActionRegistry customActionRegistry = Bukkit.getServicesManager().load(CustomActionRegistry.class);
+
 
   private final Map<String, Item> itemsById = new HashMap<>();
 
@@ -38,8 +43,10 @@ public class InventoryContainer implements InventoryHolder {
   public InventoryContainer(
       @NotNull Player player,
       @NotNull GuiLayout guiLayout,
-      @NotNull I18nAdapter i18nAdapter,
-      @NotNull PaperOpenInventoryRegistry registry
+      @NotNull I18nAdapter<?> i18nAdapter,
+      @NotNull PaperOpenInventoryRegistry registry,
+      @NotNull InventoryOpener<Player> opener,
+      @NotNull GuiMetadata metadata
   ) {
     requireNonNull(player, "Player cannot be null");
     requireNonNull(guiLayout, "GuiLayout cannot be null");
@@ -50,7 +57,8 @@ public class InventoryContainer implements InventoryHolder {
     this.uuid = UUID.randomUUID();
     this.guiLayout = guiLayout;
     this.i18nAdapter = i18nAdapter;
-    this.registry = registry;
+    this.opener = opener;
+    this.metadata = metadata;
 
     if (isPaper) {
       this.inventory = Bukkit.createInventory(
@@ -127,7 +135,26 @@ public class InventoryContainer implements InventoryHolder {
       }
       case OPEN_INVENTORY -> {
         player.closeInventory();
-        player.sendPlainMessage("Not implemented yet");
+
+        if (action.value() == null) {
+          throw new UserFriendlyRuntimeException("The OPEN_INVENTORY action value cannot be null, please provide an inventory to open");
+        }
+
+        opener.openAsync(player, action.value());
+      }
+      case NEXT_PAGE -> {
+        if (!metadata.isPagination()) {
+          throw new UserFriendlyRuntimeException("The NEXT_PAGE action can only be used in a paginated inventory");
+        }
+
+        changePage(metadata.nextPage());
+      }
+      case PREVIOUS_PAGE -> {
+        if (!metadata.isPagination()) {
+          throw new UserFriendlyRuntimeException("The PREVIOUS_PAGE action can only be used in a paginated inventory");
+        }
+
+        changePage(metadata.previousPage());
       }
       case SEND_MESSAGE -> {
         if (action.value() == null) {
@@ -136,7 +163,35 @@ public class InventoryContainer implements InventoryHolder {
 
         player.sendMessage(i18nAdapter.translateComponent(MiniMessageAdapter.format(action.value()), false));
       }
+      default -> {
+        if (customActionRegistry == null) {
+          return;
+        }
+
+        if (customActionRegistry.hasAction(action.type())) {
+          CustomPaperAction customPaperAction = customActionRegistry.getAction(action.type());
+
+          if (customPaperAction == null) {
+            throw new UserFriendlyRuntimeException("The action " + action.type() + " does not exist");
+          }
+
+          if (customPaperAction.getActionData().hasValue() && action.value() == null) {
+            throw new UserFriendlyRuntimeException("The action " + action.type() + " requires a value, please provide it");
+          }
+
+          customPaperAction.execute(player, action.value());
+        } else {
+          throw new UserFriendlyRuntimeException("The action " + action.type() + " does not exist");
+        }
+      }
     }
+  }
+
+  private void changePage(int page) {
+    Map<String, Object> context = NookureInventoryEngine.toMap(metadata.args());
+    context.put("page", page);
+
+    opener.openAsync(player, metadata.layout(), NookureInventoryEngine.toContextObjectArray(context));
   }
 
   @Override
