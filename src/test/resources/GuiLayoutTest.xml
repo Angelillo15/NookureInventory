@@ -15,14 +15,11 @@
             <Name>
                 [red]Stone[/red]
             </Name>
-            <Lore>
-                <LoreLine>
-                    [red]Magic Stone [/red]
-                </LoreLine>
-                <LoreLine>
-                    [blue]Line 2[/blue]
-                </LoreLine>
-            </Lore>
+            <LiteralLore>
+                [red]Stone[/red]
+                [blue]Line 2[/blue]
+                [green]Line 3[/green]
+            </LiteralLore>
         </Item>
         <Item
                 id="item-id-2"
