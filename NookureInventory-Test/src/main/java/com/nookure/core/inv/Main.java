@@ -67,6 +67,7 @@ public class Main extends JavaPlugin implements InventoryOpener<Player> {
             Arrays.stream(Material.values()).forEach(material -> materials.add(material.toString()));
 
             openInventoryAsync(player, "PaginationTest.peb", "materials", materials, "page", 1, "player", player);
+            return true;
           }
 
           openInventoryAsync(player, "GuiLayoutTest.xml");
