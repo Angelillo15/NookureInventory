@@ -21,6 +21,7 @@ dependencies {
   api("jakarta.xml.bind:jakarta.xml.bind-api:4.0.2")
   api("org.glassfish.jaxb:jaxb-runtime:4.0.5")
   api("com.github.ben-manes.caffeine:caffeine:3.1.8")
+  compileOnly("com.mojang:authlib:3.17.30")
 
   compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
   testImplementation(platform("org.junit:junit-bom:5.10.0"))
