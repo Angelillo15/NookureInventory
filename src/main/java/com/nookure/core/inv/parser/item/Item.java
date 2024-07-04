@@ -19,6 +19,12 @@ public class Item {
   @XmlAttribute(name = "material")
   private String material;
 
+  @XmlAttribute(name = "head")
+  private String head;
+
+  @XmlAttribute(name = "headType")
+  private HeadType headType;
+
   @XmlElement(name = "Name")
   @XmlJavaTypeAdapter(MiniMessageAdapter.class)
   private String name;
@@ -116,6 +122,24 @@ public class Item {
 
   public Item setLiteralLore(LiteralLore literalLore) {
     this.literalLore = literalLore;
+    return this;
+  }
+
+  public String head() {
+    return head;
+  }
+
+  public Item setHead(String head) {
+    this.head = head;
+    return this;
+  }
+
+  public HeadType headType() {
+    return headType;
+  }
+
+  public Item setHeadType(HeadType headType) {
+    this.headType = headType;
     return this;
   }
 }
