@@ -25,6 +25,7 @@ public class Main extends JavaPlugin {
     saveResource("gui/GuiLayoutTest.xml", false);
     saveResource("gui/PaginationTest.peb", true);
     saveResource("gui/PaginationCommon.peb", true);
+    saveResource("gui/PlayerPaginationTest.peb", true);
 
     engine = new PaperNookureInventoryEngine.Builder()
         .templateFolder("gui")
@@ -44,6 +45,13 @@ public class Main extends JavaPlugin {
             Arrays.stream(Material.values()).forEach(material -> materials.add(material.toString()));
 
             engine.openAsync(player, "PaginationTest.peb", "materials", materials, "page", 1, "player", player);
+            return true;
+          }
+
+          if (args.length > 0 && args[0].equals("players")) {
+            List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
+
+            engine.openAsync(player, "PlayerPaginationTest.peb", "players", players, "page", 1, "player", player);
             return true;
           }
 

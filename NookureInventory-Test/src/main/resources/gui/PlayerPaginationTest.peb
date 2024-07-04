@@ -1,0 +1,47 @@
+{# @pebvariable name="page" type="java.lang.Integer" #}
+{# @pebvariable name="pagination" type="com.nookure.core.inv.template.extension.PaginationItemExtension.PaginationData" #}
+{# @pebvariable name="players" type="java.util.List" #}
+{# @pebvariable name="player" type="org.bukkit.entity.Player" #}
+{% import "PaginationCommon.peb" %}
+<GuiLayout>
+    <Head>
+        <title tl="true">
+            [#F5A9C1]Players[#F5A9C1] >> [green]Page {{ page }}[/green]
+        </title>
+        <rows>6</rows>
+    </Head>
+    <Items>
+        {% set pag = pagination(9, 5, page, players.size) %}
+        {% for i in range(pag.start, pag.end, 1) %}
+        {% set player = players[i] %}
+        {% set slot = i - pag.start %}
+        <Item
+                slot="{{ slot }}"
+                headType="PLAYER_UUID"
+                head="{{ player.uniqueId }}"
+        >
+            <Name>
+                [red]{{ player.name }}[/red]
+            </Name>
+            <Lore>
+                <LoreLine>
+                    [red]Magic Stone [/red]
+                </LoreLine>
+                <LoreLine>
+                    [blue]Line 2[/blue]
+                </LoreLine>
+            </Lore>
+            <Actions>
+                <Action
+                        type="CLOSE_INVENTORY"
+                />
+                <Action
+                        type="SEND_MESSAGE"
+                        value="[green]Hello World!"
+                />
+            </Actions>
+        </Item>
+        {% endfor %}
+        {{ paginationFooter(48, 50, page, pag) }}
+    </Items>
+</GuiLayout>
