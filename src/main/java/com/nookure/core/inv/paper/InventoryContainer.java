@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.nookure.core.inv.paper.ServerUtils.isPaper;
+import static com.nookure.core.inv.paper.utils.ServerUtils.isPaper;
 import static com.nookure.core.inv.parser.item.ActionType.*;
 import static java.util.Objects.requireNonNull;
 

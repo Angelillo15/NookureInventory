@@ -1,4 +1,4 @@
-package com.nookure.core.inv.paper;
+package com.nookure.core.inv.paper.utils;
 
 public class ServerUtils {
   public static final boolean isPaper;
