@@ -5,6 +5,7 @@ import com.nookure.core.inv.I18nAdapter;
 import com.nookure.core.inv.InventoryOpener;
 import com.nookure.core.inv.NookureInventoryEngine;
 import com.nookure.core.inv.paper.service.CustomActionRegistry;
+import com.nookure.core.inv.paper.utils.ServerUtils;
 import com.nookure.core.inv.parser.GuiLayout;
 import io.pebbletemplates.pebble.extension.AbstractExtension;
 import io.pebbletemplates.pebble.loader.FileLoader;
