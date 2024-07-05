@@ -53,6 +53,8 @@ public class PaperItemConverter extends ItemConverter<ItemStack, Player> {
       }
     }
 
+    itemStack.setAmount(item.amount());
+
     ItemMeta meta = itemStack.getItemMeta();
 
     if (meta == null) {
@@ -63,20 +65,22 @@ public class PaperItemConverter extends ItemConverter<ItemStack, Player> {
       if (item.name() != null) {
         meta.displayName(adapter.translateComponent(item.name(), item.tl()));
       }
+      List<Component> lore = new ArrayList<>();
 
       if (item.lore() != null) {
-        List<Component> lore = new ArrayList<>();
-
         if (item.lore().loreLines() != null) {
           item.lore().loreLines().forEach(line -> lore.add(adapter.translateComponent(line, item.tl())));
         }
+      }
 
-        if (item.literalLore() != null) {
+      if (item.literalLore() != null) {
+        if (item.literalLore().loreLines() != null) {
           item.literalLore().loreLines().forEach(line -> lore.add(adapter.translateComponent(line, item.tl())));
         }
-
-        meta.lore(lore);
       }
+
+      meta.lore(lore);
+
     } else {
       if (item.name() != null) {
         meta.setDisplayName(adapter.translate(item.name(), item.tl()));
@@ -84,13 +88,16 @@ public class PaperItemConverter extends ItemConverter<ItemStack, Player> {
 
       if (item.lore() != null) {
         List<String> lore = new ArrayList<>();
-        if (item.lore() != null) {
+        if (item.lore().loreLines() != null) {
           item.lore().loreLines().forEach(line -> lore.add(adapter.translate(line, item.tl())));
         }
 
-        if (item.literalLore() != null) {
-          item.literalLore().loreLines().forEach(line -> lore.add(adapter.translate(line, item.tl())));
-        }
+        meta.setLore(lore);
+      }
+
+      if (item.literalLore() != null) {
+        List<String> lore = new ArrayList<>();
+        item.literalLore().loreLines().forEach(line -> lore.add(adapter.translate(line, item.tl())));
 
         meta.setLore(lore);
       }
@@ -129,9 +136,12 @@ public class PaperItemConverter extends ItemConverter<ItemStack, Player> {
         }
 
         return SkullCreator.itemFromUuid(uuid);
-      case URL: return SkullCreator.itemFromUrl(value);
-      case BASE64: return SkullCreator.itemFromBase64(value);
-      default: return null;
+      case URL:
+        return SkullCreator.itemFromUrl(value);
+      case BASE64:
+        return SkullCreator.itemFromBase64(value);
+      default:
+        return null;
     }
   }
 }

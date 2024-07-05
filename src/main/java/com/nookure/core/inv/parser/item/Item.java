@@ -6,10 +6,16 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.slf4j.LoggerFactory;
+
+import java.util.logging.Logger;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Item {
+  private static final Logger LOGGER = Logger.getLogger(Item.class.getName());
+  private static final org.slf4j.Logger log = LoggerFactory.getLogger(Item.class);
+
   @XmlAttribute(name = "id")
   private String id;
 
@@ -24,6 +30,9 @@ public class Item {
 
   @XmlAttribute(name = "headType")
   private HeadType headType;
+
+  @XmlAttribute
+  private int amount;
 
   @XmlElement(name = "Name")
   @XmlJavaTypeAdapter(MiniMessageAdapter.class)
@@ -140,6 +149,24 @@ public class Item {
 
   public Item setHeadType(HeadType headType) {
     this.headType = headType;
+    return this;
+  }
+
+  public int amount() {
+    if (amount <= 0) {
+      return 1;
+    }
+
+    if (amount > 64) {
+      LOGGER.warning("Amount of item " + id + " is greater than 64, setting to 64");
+      return 64;
+    }
+
+    return amount;
+  }
+
+  public Item setAmount(int amount) {
+    this.amount = amount;
     return this;
   }
 }
