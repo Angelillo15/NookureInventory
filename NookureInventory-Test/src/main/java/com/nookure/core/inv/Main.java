@@ -26,6 +26,7 @@ public class Main extends JavaPlugin {
     saveResource("gui/PaginationTest.peb", true);
     saveResource("gui/PaginationCommon.peb", true);
     saveResource("gui/PlayerPaginationTest.peb", true);
+    saveResource("gui/our-first-gui.xml", false);
 
     engine = new PaperNookureInventoryEngine.Builder()
         .templateFolder("gui")
@@ -34,6 +35,7 @@ public class Main extends JavaPlugin {
         .build();
 
     CommandMap commandMap = Bukkit.getServer().getCommandMap();
+    commandMap.register("nookure", new ExampleCommand(engine));
 
     commandMap.register("nookure", new Command("test") {
       @Override

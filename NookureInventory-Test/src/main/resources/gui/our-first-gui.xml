@@ -1,0 +1,60 @@
+<!-- This is the root element of *ALL* inventories -->
+<GuiLayout>
+    <!--
+      This is the head of the inventory, here you can set the title and the rows of the inventory
+      Something similar to the <head> tag in HTML 🤔
+    -->
+    <Head>
+        <!--
+          Here you define the title of the inventory, the title will be parsed by the MiniMessage library
+          so you can use the MiniMessage format here, but for limitations of the XML format, you need to
+          use [ instead of < and ] instead of >
+        -->
+        <title>
+            [#FF6545] Your awesome inventory
+        </title>
+        <!--
+          Here you define the rows of the inventory, you can set the rows to 1-6
+        -->
+        <rows>1</rows>
+    </Head>
+    <!--
+      This is the items element, this is the container of all items in the inventory
+    -->
+    <Items>
+        <!--
+          This is the item element, here you define the item that will be in the inventory
+          We have a lot of attributes that you can use here, in this case, we are using
+          the slot and material
+          attributes
+          slot: The slot where the item will be placed in the inventory, you can use 0-53,
+                each row has 9 slots but remember that arrays start at 0, so the first slot
+                is 0
+          material: The material of the item, you can use the material name or the material
+                    id this should be present in the
+                    Material enum https://jd.papermc.io/paper/1.21/org/bukkit/Material.html
+        -->
+        <Item
+                slot="4"
+                material="STONE"
+        >
+            <!--
+              This is the name of the item, here you can set the name of the item
+              The name will be parsed by the MiniMessage library
+              Just like the title, you need to use [ instead of < and ] instead of >
+            -->
+            <Name>
+                [red]Magic Stone ✨[/red]
+            </Name>
+            <!--
+              This is the lore of the item, here you can set the lore of the item
+              The lore will be parsed by the MiniMessage library
+              Just like the title, you need to use [ instead of < and ] instead of >
+            -->
+            <LiteralLore>
+                This is a magic stone
+                [red]It's very powerful[/red]
+            </LiteralLore>
+        </Item>
+    </Items>
+</GuiLayout>
