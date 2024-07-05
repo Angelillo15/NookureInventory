@@ -39,7 +39,6 @@ public class NookureInventoryEngine {
   {
     try {
       unmarshaller = context.createUnmarshaller();
-      unmarshaller.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, Boolean.TRUE);
     } catch (JAXBException e) {
       throw new RuntimeException(e);
     }
