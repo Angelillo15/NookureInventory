@@ -7,7 +7,7 @@ plugins {
   id("java-library")
 }
 
-group = "com.nookure.core.inv"
+group = "com.nookure.core"
 version = "1.0.0-${grgit.head().abbreviatedId}"
 
 repositories {
@@ -43,7 +43,7 @@ publishing {
   publications {
     create<MavenPublication>("mavenJava") {
       groupId = project.group.toString()
-      artifactId = project.name
+      artifactId = "NookCore-Inventory"
       version = rootProject.version.toString()
 
       from(components["java"])
@@ -60,7 +60,7 @@ gitPublish {
   repoUri = "https://github.com/Nookure/maven.git"
   branch = "main"
   fetchDepth = null
-  commitMessage = "NookureInventory $version"
+  commitMessage = "NookCore-Inventory $version"
 
   contents {
     from("${rootProject.rootDir}/maven")
