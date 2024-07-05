@@ -87,3 +87,11 @@ java {
   withJavadocJar()
   withSourcesJar()
 }
+
+tasks {
+  withType<Javadoc> {
+    val o = options as StandardJavadocDocletOptions
+    o.encoding = "UTF-8"
+    o.source = "17"
+  }
+}

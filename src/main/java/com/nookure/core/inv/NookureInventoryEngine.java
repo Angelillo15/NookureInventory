@@ -81,12 +81,12 @@ public class NookureInventoryEngine {
    * Renders a template with the given context
    * <p>
    * Here is an example of how to use this method:
+   * </p>
    * <pre>
    *     NookureInventoryEngine engine = new NookureInventoryEngine(Path.of("/path/to/templates"));
    *
    *     engine.renderTemplate("template.html", "name", "Angelillo15", "age", "16");
-   * <pre>
-   * </p>
+   * </pre>
    *
    * @param templateName The name of the template to render
    * @param context      The context to render the template with
@@ -152,12 +152,12 @@ public class NookureInventoryEngine {
    *
    * <p>
    * Here is an example of how to use this method:
+   * </p>
    * <pre>
    *     NookureInventoryEngine engine = new NookureInventoryEngine(Path.of("/path/to/templates"));
    *
    *     engine.parseLayout("template.html", "name", "Angelillo15", "age", "16");
-   * <pre>
-   * </p>
+   * </pre>
    *
    * @param templateName The name of the template to render
    * @param context      The context to render the template with
