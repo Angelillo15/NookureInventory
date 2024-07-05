@@ -6,18 +6,17 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import org.junit.jupiter.api.Test;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.InputStream;
 
 public class XMLParsingTest {
   private static final InputStream xmlStream = XMLParsingTest.class.getClassLoader().getResourceAsStream("GuiLayoutTest.xml");
 
   @Test
-  public void xmlTest() throws JAXBException {
-    JAXBContext context = JAXBContext.newInstance(GuiLayout.class);
-    Unmarshaller unmarshaller = context.createUnmarshaller();
-
-    GuiLayout guiLayout = (GuiLayout) unmarshaller.unmarshal(xmlStream);
+  public void xmlTest() throws JAXBException, ParserConfigurationException, SAXException {
+    GuiLayout guiLayout = ActionTest.guiLayout(xmlStream);
 
     System.out.println("Title: " + guiLayout.head().title().title());
     System.out.println("Title tl: " + guiLayout.head().title().tl());

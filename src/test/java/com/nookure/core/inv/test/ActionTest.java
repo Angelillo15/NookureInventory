@@ -1,23 +1,25 @@
 package com.nookure.core.inv.test;
 
+import com.nookure.core.inv.NookureInventoryEngine;
 import com.nookure.core.inv.parser.GuiLayout;
 import com.nookure.core.inv.parser.item.Action;
 import com.nookure.core.inv.parser.item.Item;
+import io.pebbletemplates.pebble.loader.StringLoader;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import org.junit.jupiter.api.Test;
+import org.xml.sax.SAXException;
 
-import java.io.InputStream;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class ActionTest {
   private static final InputStream xmlStream = XMLParsingTest.class.getClassLoader().getResourceAsStream("GuiLayoutTest.xml");
   @Test
-  public void action() throws JAXBException {
-    JAXBContext context = JAXBContext.newInstance(GuiLayout.class);
-    Unmarshaller unmarshaller = context.createUnmarshaller();
-
-    GuiLayout guiLayout = (GuiLayout) unmarshaller.unmarshal(xmlStream);
+  public void action() throws JAXBException, ParserConfigurationException, SAXException {
+    GuiLayout guiLayout = guiLayout(xmlStream);
 
     System.out.println("Title: " + guiLayout.head().title().title());
     System.out.println("Title tl: " + guiLayout.head().title().tl());
@@ -41,5 +43,24 @@ public class ActionTest {
         }
       }
     }
+  }
+
+  public static GuiLayout guiLayout(InputStream xmlStream) throws JAXBException, ParserConfigurationException, SAXException {
+    NookureInventoryEngine engine = new NookureInventoryEngine(new StringLoader());
+    StringBuilder textBuilder = new StringBuilder();
+    assert xmlStream != null;
+
+    try (Reader reader = new BufferedReader(new InputStreamReader
+        (xmlStream, StandardCharsets.UTF_8))) {
+      int c = 0;
+      while ((c = reader.read()) != -1) {
+        textBuilder.append((char) c);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
+    GuiLayout guiLayout = engine.parseLayout(textBuilder.toString());
+    return guiLayout;
   }
 }
