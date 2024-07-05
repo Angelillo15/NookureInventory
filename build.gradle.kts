@@ -82,3 +82,8 @@ allprojects {
     }
   }
 }
+
+java {
+  withJavadocJar()
+  withSourcesJar()
+}
