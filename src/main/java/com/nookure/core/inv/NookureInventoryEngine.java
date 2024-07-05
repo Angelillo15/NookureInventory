@@ -11,6 +11,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import org.jetbrains.annotations.NotNull;
 
+import javax.xml.XMLConstants;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -38,6 +39,7 @@ public class NookureInventoryEngine {
   {
     try {
       unmarshaller = context.createUnmarshaller();
+      unmarshaller.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, Boolean.TRUE);
     } catch (JAXBException e) {
       throw new RuntimeException(e);
     }
