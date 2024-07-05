@@ -69,7 +69,7 @@ public class PaperNookureInventoryEngine extends NookureInventoryEngine implemen
         } else {
           guiLayout = parseLayout(layout, "player", player);
         }
-      } catch (JAXBException e) {
+      } catch (Exception e) {
         throw new RuntimeException(e);
       }
 
