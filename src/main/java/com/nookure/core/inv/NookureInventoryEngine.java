@@ -10,8 +10,13 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import org.jetbrains.annotations.NotNull;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.sax.SAXSource;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -40,6 +45,21 @@ public class NookureInventoryEngine {
     try {
       unmarshaller = context.createUnmarshaller();
     } catch (JAXBException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private final SAXParserFactory spf;
+
+  {
+    spf = SAXParserFactory.newInstance();
+    try {
+      spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+      spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+      spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+      spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      spf.setXIncludeAware(false);
+    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
@@ -96,9 +116,9 @@ public class NookureInventoryEngine {
    *                     The values can be any object
    *                     The context will be passed to the template
    *                     as variables
+   * @return The rendered template
    * @throws IllegalArgumentException If the context is not key-value pairs
    *                                  or the keys are not strings
-   * @return The rendered template
    */
   public String renderTemplate(@NotNull String templateName, @NotNull Object... context) {
     return renderTemplate(templateName, toMap(context));
@@ -135,12 +155,14 @@ public class NookureInventoryEngine {
    * @throws JAXBException    If the layout could not be parsed
    * @throws RuntimeException If the layout could not be parsed
    */
-  public GuiLayout parseLayout(@NotNull String templateName, @NotNull Map<String, Object> context) throws JAXBException {
+  public GuiLayout parseLayout(@NotNull String templateName, @NotNull Map<String, Object> context) throws JAXBException, ParserConfigurationException, SAXException {
     String renderedTemplate = renderTemplate(templateName, context);
     StringReader reader = new StringReader(renderedTemplate);
+    InputSource inputSource = new InputSource(reader);
+    SAXSource saxSource = new SAXSource(spf.newSAXParser().getXMLReader(), inputSource);
 
     synchronized (unmarshaller) {
-      if (unmarshaller.unmarshal(reader) instanceof GuiLayout guiLayout) {
+      if (unmarshaller.unmarshal(saxSource) instanceof GuiLayout guiLayout) {
         return guiLayout;
       }
     }
@@ -167,11 +189,11 @@ public class NookureInventoryEngine {
    *                     The values can be any object
    *                     The context will be passed to the template
    *                     as variables
+   * @return The rendered template as a GuiLayout
    * @throws IllegalArgumentException If the context is not key-value pairs
    *                                  or the keys are not strings
-   * @return The rendered template as a GuiLayout
    */
-  public GuiLayout parseLayout(@NotNull String templateName, @NotNull Object... context) throws JAXBException {
+  public GuiLayout parseLayout(@NotNull String templateName, @NotNull Object... context) throws JAXBException, ParserConfigurationException, SAXException {
     return parseLayout(templateName, toMap(context));
   }
 
@@ -225,5 +247,17 @@ public class NookureInventoryEngine {
    */
   public Loader<?> getLoader() {
     return loader;
+  }
+
+  public JAXBContext getContext() {
+    return context;
+  }
+
+  public Unmarshaller getUnmarshaller() {
+    return unmarshaller;
+  }
+
+  public SAXParserFactory getSAXParserFactory() {
+    return spf;
   }
 }
