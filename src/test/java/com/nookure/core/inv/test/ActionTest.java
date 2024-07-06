@@ -2,12 +2,10 @@ package com.nookure.core.inv.test;
 
 import com.nookure.core.inv.NookureInventoryEngine;
 import com.nookure.core.inv.parser.GuiLayout;
-import com.nookure.core.inv.parser.item.Action;
+import com.nookure.core.inv.parser.item.action.Action;
 import com.nookure.core.inv.parser.item.Item;
 import io.pebbletemplates.pebble.loader.StringLoader;
-import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
@@ -60,7 +58,6 @@ public class ActionTest {
       throw new RuntimeException(e);
     }
 
-    GuiLayout guiLayout = engine.parseLayout(textBuilder.toString());
-    return guiLayout;
+    return engine.parseLayout(textBuilder.toString());
   }
 }
