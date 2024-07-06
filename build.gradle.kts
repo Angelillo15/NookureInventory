@@ -25,6 +25,7 @@ dependencies {
 
   compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
   testImplementation(platform("org.junit:junit-bom:5.10.0"))
+  testImplementation("com.google.code.gson:gson:2.11.0")
   testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
