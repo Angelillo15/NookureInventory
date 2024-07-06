@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE GuiLayout SYSTEM "https://nookure.com/xsd/inv/v1/GuiLayout.xsd">
+    {# @pebvariable name="p" type="org.bukkit.entity.Player" #}
+    {# @pebvariable name="playerTest" type="java.lang.String" #}
+
+<GuiLayout>
+    <Head>
+        {% set p = getBukkitPlayer(playerTest) %}
+        <title>{{ p.name }}</title>
+        <rows>1</rows>
+    </Head>
+    <Items>
+
+    </Items>
+</GuiLayout>

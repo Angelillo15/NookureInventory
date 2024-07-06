@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE GuiLayout SYSTEM "https://nookure.com/xsd/inv/v1/GuiLayout.xsd">
+    {# @pebvariable name="player" type="org.bukkit.entity.Player" #}
+<GuiLayout>
+    <Head>
+        <title>Test1</title>
+        <rows>1</rows>
+    </Head>
+    <Items>
+        <Item slot="1" material="STONE">
+            <Name>Click Me</Name>
+            <Actions>
+                <Action type="OPEN_INVENTORY" value="{{ inventoryProps("OpenGui2.peb", {"playerTest": player.uniqueId.toString()} ) }}"/>
+            </Actions>
+        </Item>
+    </Items>
+</GuiLayout>

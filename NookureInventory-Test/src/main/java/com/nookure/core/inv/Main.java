@@ -1,6 +1,8 @@
 package com.nookure.core.inv;
 
 import com.nookure.core.inv.paper.PaperNookureInventoryEngine;
+import com.nookure.core.inv.template.extension.GetBukkitPlayerExtension;
+import com.nookure.core.inv.template.extension.OpenInventoryExtension;
 import com.nookure.core.inv.template.extension.PaginationItemExtension;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -27,15 +29,18 @@ public class Main extends JavaPlugin {
     saveResource("gui/PaginationCommon.peb", true);
     saveResource("gui/PlayerPaginationTest.peb", true);
     saveResource("gui/our-first-gui.xml", false);
+    saveResource("gui/OpenGui1.peb", true);
+    saveResource("gui/OpenGui2.peb", true);
 
     engine = new PaperNookureInventoryEngine.Builder()
         .templateFolder("gui")
         .plugin(this)
-        .extensions(new PaginationItemExtension())
+        .extensions(new PaginationItemExtension(), new OpenInventoryExtension(), new GetBukkitPlayerExtension())
         .build();
 
     CommandMap commandMap = Bukkit.getServer().getCommandMap();
     commandMap.register("nookure", new ExampleCommand(engine));
+    commandMap.register("nookure", new OpenInventoryTestCommand(engine));
 
     commandMap.register("nookure", new Command("test") {
       @Override

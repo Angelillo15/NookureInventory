@@ -11,7 +11,7 @@
                 {% else %}
                 material="BARRIER"
                 {% endif %}
-                slot="48"
+                slot="{{ previousSlot }}"
         >
             <Name>
                 [red]Previous Page ✨[/red]
@@ -38,7 +38,7 @@
                 {% else %}
                 material="BARRIER"
                 {% endif %}
-                slot="50"
+                slot="{{ nextSlot }}"
         >
             <Name>
                 [red]Next Page ✨[/red]
