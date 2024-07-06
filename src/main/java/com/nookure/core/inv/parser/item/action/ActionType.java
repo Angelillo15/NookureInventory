@@ -1,4 +1,4 @@
-package com.nookure.core.inv.parser.item;
+package com.nookure.core.inv.parser.item.action;
 
 public class ActionType {
   public static final String OPEN_INVENTORY = "OPEN_INVENTORY";

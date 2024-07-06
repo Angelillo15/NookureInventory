@@ -1,4 +1,4 @@
-package com.nookure.core.inv.parser.item;
+package com.nookure.core.inv.parser.item.action;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
 
