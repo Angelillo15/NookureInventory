@@ -1,12 +1,17 @@
 package com.nookure.core.inv.paper;
 
-import com.nookure.core.inv.*;
+import com.google.gson.Gson;
+import com.nookure.core.inv.GuiMetadata;
+import com.nookure.core.inv.I18nAdapter;
+import com.nookure.core.inv.InventoryOpener;
+import com.nookure.core.inv.NookureInventoryEngine;
 import com.nookure.core.inv.exception.UserFriendlyRuntimeException;
 import com.nookure.core.inv.paper.service.CustomActionRegistry;
 import com.nookure.core.inv.parser.GuiLayout;
 import com.nookure.core.inv.parser.adapters.MiniMessageAdapter;
-import com.nookure.core.inv.parser.item.Action;
 import com.nookure.core.inv.parser.item.Item;
+import com.nookure.core.inv.parser.item.action.Action;
+import com.nookure.core.inv.parser.item.action.json.OpenInventoryProps;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -23,7 +28,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.nookure.core.inv.paper.utils.ServerUtils.isPaper;
-import static com.nookure.core.inv.parser.item.ActionType.*;
+import static com.nookure.core.inv.parser.item.action.ActionType.*;
 import static java.util.Objects.requireNonNull;
 
 public class InventoryContainer implements InventoryHolder {
@@ -36,6 +41,7 @@ public class InventoryContainer implements InventoryHolder {
   private final GuiMetadata metadata;
   private final CustomActionRegistry customActionRegistry = Bukkit.getServicesManager().load(CustomActionRegistry.class);
   private final Map<String, Item> itemsById = new HashMap<>();
+  private final Gson gson = new Gson();
 
   @SuppressWarnings("deprecation")
   public InventoryContainer(
@@ -77,6 +83,9 @@ public class InventoryContainer implements InventoryHolder {
   }
 
   public void fillItems() {
+    if (guiLayout.items() == null || guiLayout.items().itemList() == null) {
+      return;
+    }
     guiLayout
         .items()
         .itemList()
@@ -138,7 +147,26 @@ public class InventoryContainer implements InventoryHolder {
           throw new UserFriendlyRuntimeException("The OPEN_INVENTORY action value cannot be null, please provide an inventory to open");
         }
 
-        opener.openAsync(player, action.value());
+        try {
+          OpenInventoryProps props = gson.fromJson(action.value(), OpenInventoryProps.class);
+          if (props == null) {
+            throw new UserFriendlyRuntimeException("The OPEN_INVENTORY action value is not a valid JSON object");
+          }
+
+          if (props.getInventoryName() == null) {
+            throw new UserFriendlyRuntimeException("The OPEN_INVENTORY action value does not contain an inventoryName");
+          }
+
+          if (props.getContext().isEmpty()) {
+            opener.openAsync(player, props.getInventoryName());
+            return;
+          }
+
+
+          opener.openAsync(player, props.getInventoryName(), NookureInventoryEngine.toContextObjectArray(props.getContext()));
+        } catch (Exception e) {
+          throw new UserFriendlyRuntimeException("The OPEN_INVENTORY action value is not a valid JSON object");
+        }
       }
       case NEXT_PAGE -> {
         if (!metadata.isPagination()) {
