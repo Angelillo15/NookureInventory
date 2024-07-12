@@ -7,7 +7,7 @@
         <rows>1</rows>
     </Head>
     <Items>
-        <Item slot="1" material="STONE">
+        <Item slot="1" material="STONE" enchanted="true">
             <Name>Click Me</Name>
             <Actions>
                 <Action type="OPEN_INVENTORY" value="{{ inventoryProps("OpenGui2.peb", {"playerTest": player.uniqueId.toString()} ) }}"/>
