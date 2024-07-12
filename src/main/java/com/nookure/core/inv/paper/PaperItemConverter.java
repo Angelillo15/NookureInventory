@@ -10,7 +10,7 @@ import com.nookure.core.inv.parser.item.ItemConverter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.Registry;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -38,6 +38,10 @@ public class PaperItemConverter extends ItemConverter<ItemStack, Player> {
   @Override
   @SuppressWarnings("deprecation")
   public ItemStack convert(Item item, I18nAdapter<Player> adapter) {
+    if (item.material() == null && item.head() == null) {
+      throw new UserFriendlyRuntimeException("Material or head must be set for item " + item.id());
+    }
+
     ItemStack itemStack;
     if (item.material() == null) {
       itemStack = createHead(item.head(), item.headType());
@@ -113,7 +117,7 @@ public class PaperItemConverter extends ItemConverter<ItemStack, Player> {
     }
 
     if (item.enchanted()) {
-      meta.addEnchant(Enchantment.DURABILITY, 1, true);
+      Registry.ENCHANTMENT.stream().findAny().ifPresent(enchantment -> meta.addEnchant(enchantment, 1, true));
     }
 
     itemStack.setItemMeta(meta);
