@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class GetClassFunction implements Function {
+public final class GetClassFunction implements Function {
   private final TemplateExceptionService exceptionService = TemplateExceptionService.INSTANCE;
 
   @Override

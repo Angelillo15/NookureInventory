@@ -9,7 +9,7 @@ import io.pebbletemplates.pebble.extension.Function;
 
 import java.util.Map;
 
-public class ReflectionExtension extends AbstractExtension {
+public final class ReflectionExtension extends AbstractExtension {
   @Override
   public Map<String, Function> getFunctions() {
     return Map.of(
