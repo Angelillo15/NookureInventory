@@ -1,5 +1,7 @@
 package com.nookure.core.inv.template.extension;
 
+import com.nookure.core.inv.exception.TemplateException;
+import com.nookure.core.inv.exception.TemplateExceptionService;
 import com.nookure.core.inv.exception.UserFriendlyRuntimeException;
 import io.pebbletemplates.pebble.extension.AbstractExtension;
 import io.pebbletemplates.pebble.extension.Function;
@@ -8,8 +10,11 @@ import io.pebbletemplates.pebble.template.PebbleTemplate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class PaginationItemExtension extends AbstractExtension implements Function {
+  private final TemplateExceptionService exceptionService = TemplateExceptionService.INSTANCE;
+
   @Override
   public Map<String, Function> getFunctions() {
     return Map.of("pagination", this);
@@ -20,17 +25,67 @@ public class PaginationItemExtension extends AbstractExtension implements Functi
 
   @Override
   public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
-    Long rows = (Long) args.get("rows");
-    Long columns = (Long) args.get("columns");
-    Integer page = (Integer) args.get("page");
-    Integer total = (Integer) args.get("total");
+    UUID templateUUID = (UUID) context.getVariable("templateUUID");
+    Long rows;
+
+    try {
+      if (args.get("rows") instanceof Integer) {
+        rows = ((Integer) args.get("rows")).longValue();
+      } else {
+        rows = (Long) args.get("rows");
+      }
+    } catch (ClassCastException e) {
+      exceptionService.addException(templateUUID, new TemplateException(400, "Rows must be a number", lineNumber));
+      return null;
+    }
+
+    Long columns;
+
+    try {
+      if (args.get("columns") instanceof Integer) {
+        columns = ((Integer) args.get("columns")).longValue();
+      } else {
+        columns = (Long) args.get("columns");
+      }
+    } catch (ClassCastException e) {
+      exceptionService.addException(templateUUID, new TemplateException(400, "Columns must be a number", lineNumber));
+      return null;
+    }
+
+    Long page;
+
+    try {
+      if (args.get("page") instanceof Integer) {
+        page = ((Integer) args.get("page")).longValue();
+      } else {
+        page = (Long) args.get("page");
+      }
+    } catch (ClassCastException e) {
+      exceptionService.addException(templateUUID, new TemplateException(400, "Page must be a number", lineNumber));
+      return null;
+    }
+
+    Long total;
+
+    try {
+      if (args.get("total") instanceof Integer) {
+        total = ((Integer) args.get("total")).longValue();
+      } else {
+        total = (Long) args.get("total");
+      }
+    } catch (ClassCastException e) {
+      exceptionService.addException(templateUUID, new TemplateException(400, "Total must be a number", lineNumber));
+      return null;
+    }
 
     if (rows == null || columns == null || page == null || total == null) {
-      throw new UserFriendlyRuntimeException("Missing required arguments for pagination ---> pagination(rows, columns, page, total)");
+      exceptionService.addException(templateUUID, new TemplateException(400, "Pagination arguments must be provided", lineNumber));
+      return null;
     }
 
     if (rows < 0 || columns < 0 || page < 0 || total < 0) {
-      throw new UserFriendlyRuntimeException("Pagination arguments must be positive numbers");
+      exceptionService.addException(templateUUID, new TemplateException(400, "Pagination arguments must be positive", lineNumber));
+      return null;
     }
 
     long start = (page - 1) * rows * columns;
