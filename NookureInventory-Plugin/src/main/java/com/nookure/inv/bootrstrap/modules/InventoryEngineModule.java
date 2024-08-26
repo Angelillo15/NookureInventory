@@ -1,6 +1,7 @@
 package com.nookure.inv.bootrstrap.modules;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import com.nookure.core.annotation.PluginDataFolder;
 import com.nookure.core.inv.paper.PaperNookureInventoryEngine;
@@ -9,6 +10,7 @@ import com.nookure.core.inv.util.JarUtil;
 import com.nookure.core.logger.Logger;
 import com.nookure.inv.api.service.InventoryFileSystemService;
 import com.nookure.inv.bootrstrap.BootstrapModule;
+import com.nookure.inv.extension.DatabaseExtension;
 import com.nookure.inv.extension.ReflectionExtension;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,6 +32,8 @@ public class InventoryEngineModule implements BootstrapModule {
   private Logger logger;
   @Inject
   private InventoryFileSystemService inventoryFileSystemService;
+  @Inject
+  private Injector injector;
 
   @Override
   public void onEnable() {
@@ -45,7 +49,11 @@ public class InventoryEngineModule implements BootstrapModule {
     PaperNookureInventoryEngine inventoryEngine = new PaperNookureInventoryEngine.Builder()
         .plugin(plugin)
         .templateFolder("inventories")
-        .extensions(new PaginationItemExtension(), new ReflectionExtension())
+        .extensions(
+            injector.getInstance(PaginationItemExtension.class),
+            injector.getInstance(ReflectionExtension.class),
+            injector.getInstance(DatabaseExtension.class)
+        )
         .build();
 
     engine.set(inventoryEngine);
