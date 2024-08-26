@@ -1,5 +1,7 @@
 package com.nookure.core.inv;
 
+import com.nookure.core.inv.exception.TemplateException;
+import com.nookure.core.inv.exception.TemplateExceptionService;
 import com.nookure.core.inv.parser.GuiLayout;
 import io.pebbletemplates.pebble.PebbleEngine;
 import io.pebbletemplates.pebble.extension.AbstractExtension;
@@ -10,6 +12,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -21,15 +24,17 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Logger;
 
 import static java.util.Objects.requireNonNull;
 
 public class NookureInventoryEngine {
+  private static final Logger log = java.util.logging.Logger.getLogger("NookureInventoryEngine");
   private final PebbleEngine engine;
   private final Loader<?> loader;
   private final JAXBContext context;
+  private final TemplateExceptionService exceptionService = TemplateExceptionService.INSTANCE;
 
   {
     try {
@@ -132,6 +137,9 @@ public class NookureInventoryEngine {
    * @return The rendered template
    */
   public String renderTemplate(@NotNull String templateName, @NotNull Map<String, Object> context) {
+    final UUID uuid = UUID.randomUUID();
+    // Add the UUID to the context
+    context.put("templateUUID", uuid);
     Writer writer = new StringWriter();
 
     requireNonNull(templateName, "templateName cannot be null");
@@ -139,8 +147,30 @@ public class NookureInventoryEngine {
 
     try {
       template.evaluate(writer, context);
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to render template", e);
+    } catch (Exception exception) {
+      exceptionService.addException(uuid, new TemplateException(500, exception.getMessage(), -1));
+    }
+
+    List<TemplateException> exceptions = exceptionService.getExceptionsAndClear(uuid);
+
+    if (!exceptions.isEmpty()) {
+      log.severe("Failed to parse layout due to some exceptions");
+      log.severe("Please review the exceptions below carefully");
+
+      for (int i = 0; i < exceptions.size(); i++) {
+        TemplateException exception = exceptions.get(i);
+
+        log.severe(String.format(
+            "Exception nº%d with code %s because of %s at line %s in %s",
+            i + 1,
+            exception.statusCode(),
+            exception.reason() == null ? "Unknown" : exception.reason(),
+            exception.lineNumber() == -1 ? "Unknown" : exception.lineNumber(),
+            templateName
+        ));
+      }
+
+      return null;
     }
 
     return writer.toString();
@@ -156,10 +186,15 @@ public class NookureInventoryEngine {
    * @throws RuntimeException If the layout could not be parsed
    */
   public GuiLayout parseLayout(@NotNull String templateName, @NotNull Map<String, Object> context) throws JAXBException, ParserConfigurationException, SAXException {
-    String renderedTemplate = renderTemplate(templateName, context);
-    StringReader reader = new StringReader(renderedTemplate);
-    InputSource inputSource = new InputSource(reader);
-    SAXSource saxSource = new SAXSource(spf.newSAXParser().getXMLReader(), inputSource);
+    final String renderedTemplate = renderTemplate(templateName, context);
+
+    if (renderedTemplate == null) {
+      return null;
+    }
+
+    final StringReader reader = new StringReader(renderedTemplate);
+    final InputSource inputSource = new InputSource(reader);
+    final SAXSource saxSource = new SAXSource(spf.newSAXParser().getXMLReader(), inputSource);
 
     synchronized (unmarshaller) {
       if (unmarshaller.unmarshal(saxSource) instanceof GuiLayout guiLayout) {

@@ -73,6 +73,16 @@ public class PaperNookureInventoryEngine extends NookureInventoryEngine implemen
         throw new RuntimeException(e);
       }
 
+      if (guiLayout == null) {
+        final String message = "<red>An error occurred while loading the inventory, please report this to an administrator";
+        if (ServerUtils.isPaper) {
+          player.sendMessage(i18nAdapter.translateComponent(message));
+        } else {
+          player.sendMessage(i18nAdapter.translate(message));
+        }
+        return;
+      }
+
       String permission = guiLayout.head().permission();
       String permissionMessage = guiLayout.head().noPermissionMessage();
 
