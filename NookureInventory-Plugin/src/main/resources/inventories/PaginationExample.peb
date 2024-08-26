@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE GuiLayout SYSTEM "https://nookure.com/xsd/inv/v1/GuiLayout.xsd">
+    {# @pebvariable name="page" type="java.lang.Integer" #}
+    {# @pebvariable name="pagination" type="com.nookure.core.inv.template.extension.PaginationItemExtension.PaginationData" #}
+    {# @pebvariable name="materials" type="java.util.List" #}
+    {# @pebvariable name="player" type="org.bukkit.entity.Player" #}
+    {# @pebvariable name="paginationFooter" type="java.lang.String" #}
+    {# @pebvariable name="getClass" type="java.lang.Class" #}
+    {# @pebvariable name="runStaticMethod" type="java.lang.Object" #}
+    {# @pebvariable name="toList" type="java.util.List" #}
+    {# @pebvariable name="currentPage" type="java.lang.Integer" #}
+    {% import "/core/pagination/PaginationFooter.peb" %}
+<GuiLayout>
+    <Head>
+        <title tl="true">
+            [green]The[/green][red]Inventory[/red][blue]Title[/blue] >> [green]Page {{ page }}[/green]
+        </title>
+        <rows>6</rows>
+    </Head>
+    <Items>
+        {% set materialClass = getClass("org.bukkit.Material") %}
+        {% set currentPage = page == null ? 1 : page %}
+        {% set materials = toList(runStaticMethod(materialClass, "values", [])) %}
+        {% set pag = pagination(9, 5, currentPage, materials.size()) %}
+        {% for i in range(pag.start, pag.end, 1) %}
+            {% set material = materials[i] %}
+            {% set slot = i - pag.start %}
+            <Item
+                    slot="{{ slot }}"
+                    material="{{ material }}"
+            >
+                <Name>
+                    [red]{{ player.name }}[/red]
+                </Name>
+                <Lore>
+                    <LoreLine>
+                        [red]Magic Stone [/red]
+                    </LoreLine>
+                    <LoreLine>
+                        [blue]Line 2[/blue]
+                    </LoreLine>
+                </Lore>
+                <Actions>
+                    <Action
+                            type="CLOSE_INVENTORY"
+                    />
+                    <Action
+                            type="SEND_MESSAGE"
+                            value="[green]Hello World!"
+                    />
+                </Actions>
+            </Item>
+        {% endfor %}
+        {{ paginationFooter(48, 50, page, pag) }}
+    </Items>
+</GuiLayout>
