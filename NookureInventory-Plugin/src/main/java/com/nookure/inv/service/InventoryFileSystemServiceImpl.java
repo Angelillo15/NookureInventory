@@ -1,7 +1,5 @@
 package com.nookure.inv.service;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.nookure.inv.api.annotation.PluginInventoriesFolder;
