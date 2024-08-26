@@ -11,6 +11,8 @@ import com.nookure.core.database.annotation.EntityClassMappings;
 import com.nookure.core.logger.annotation.PluginAudience;
 import com.nookure.core.logger.annotation.PluginLoggerColor;
 import com.nookure.core.logger.annotation.PluginName;
+import com.nookure.inv.api.database.GlobalVariableModel;
+import com.nookure.inv.api.database.PlayerVariableModel;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -19,6 +21,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.nookure.inv.api.database.BaseModel.DATABASE_NAME;
 
 public class NookCoreModule extends AbstractModule {
   private final JavaPlugin plugin;
@@ -35,9 +39,12 @@ public class NookCoreModule extends AbstractModule {
   @Override
   @SuppressWarnings("UnstableApiUsage")
   protected void configure() {
-    bind(String.class).annotatedWith(EbeanDatabaseName.class).toInstance("nkinventory");
+    bind(String.class).annotatedWith(EbeanDatabaseName.class).toInstance(DATABASE_NAME);
     bind(new TypeLiteral<List<Class<?>>>() {
-    }).annotatedWith(EntityClassMappings.class).toInstance(List.of());
+    }).annotatedWith(EntityClassMappings.class).toInstance(List.of(
+        GlobalVariableModel.class,
+        PlayerVariableModel.class
+    ));
     bind(Path.class).annotatedWith(PluginDataFolder.class).toInstance(this.plugin.getDataFolder().toPath());
     bind(String.class).annotatedWith(PluginColoredName.class).toInstance("<b><gradient:#E43A96:#F2C6DE>NookureInventory</gradient></b>");
     bind(AtomicBoolean.class).annotatedWith(PluginDebug.class).toInstance(new AtomicBoolean(this.isDebug));
