@@ -1,7 +1,6 @@
 plugins {
   id("java")
   id("com.github.johnrengelman.shadow") version ("8.1.1")
-  id("xyz.jpenilla.run-paper") version "2.3.0"
 }
 
 group = "com.nookure.core.inv"
@@ -20,17 +19,19 @@ dependencies {
   implementation("org.glassfish.jaxb:jaxb-runtime:4.0.5")
   implementation(project(":"))
 }
-
+/*
 tasks {
   runServer {
-    minecraftVersion("1.20.4")
+    minecraftVersion("1.21.1")
   }
 }
 
 tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
   javaLauncher = javaToolchains.launcherFor {
     vendor = JvmVendorSpec.JETBRAINS
-    languageVersion = JavaLanguageVersion.of(17)
+    languageVersion = JavaLanguageVersion.of(21)
   }
   jvmArgs("-XX:+AllowEnhancedClassRedefinition", "-XX:+AllowRedefinitionToAddDeleteMethods")
 }
+
+ */

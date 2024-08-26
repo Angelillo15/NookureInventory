@@ -1,0 +1,52 @@
+[versions]
+shadowJar = "8.1.8"
+git-publish = "4.2.1"
+grgit = "5.2.2"
+pebble = "3.2.2"
+annotations = "24.1.0"
+jakarta-xml-bind-api = "4.0.2"
+jaxb-runtime = "4.0.5"
+caffeine = "3.1.8"
+authlib = "3.17.30"
+paper-api = "1.20.4-R0.1-SNAPSHOT"
+junit-bom = "5.10.0"
+gson = "2.11.0"
+plugin-yaml = "0.6.0"
+configurate = "4.2.0-YAML-COMMENTED-SNAPSHOT"
+nook-core = "1.0.0-05e5c74"
+google-guice = "7.0.0"
+google-auto-value = "1.11.0"
+google-auto-service = "1.1.1"
+run-paper = "2.3.1"
+
+[libraries]
+pebble = { module = "io.pebbletemplates:pebble", version.ref = "pebble" }
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+jakarta-xml-bind-api = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version.ref = "jakarta-xml-bind-api" }
+jaxb-runtime = { module = "org.glassfish.jaxb:jaxb-runtime", version.ref = "jaxb-runtime" }
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
+authlib = { module = "com.mojang:authlib", version.ref = "authlib" }
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit-bom" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-bom" }
+configurateYaml = { group = "org.spongepowered", name = "configurate-yaml", version.ref = "configurate" }
+nook-core-config = { group = "com.nookure.core", name = "NookCore-Config", version.ref = "nook-core" }
+nook-core-database = { group = "com.nookure.core", name = "NookCore-Database", version.ref = "nook-core" }
+nook-core-logger = { group = "com.nookure.core", name = "NookCore-Logger", version.ref = "nook-core" }
+google-guice = { module = "com.google.inject:guice", version.ref = "google-guice" }
+google-guice-assisted = { module = "com.google.inject.extensions:guice-assistedinject", version.ref = "google-guice" }
+google-auto-value-processor = { module = "com.google.auto.value:auto-value", version.ref = "google-auto-value" }
+google-auto-value-annotations = { module = "com.google.auto.value:auto-value-annotations", version.ref = "google-auto-value" }
+google-auto-service = { module = "com.google.auto.service:auto-service", version.ref = "google-auto-service" }
+
+[plugins]
+shadow = { id = "io.github.goooler.shadow", version.ref = "shadowJar" }
+git-publish = { id = "org.ajoberstar.git-publish", version.ref = "git-publish" }
+grgit = { id = "org.ajoberstar.grgit", version.ref = "grgit" }
+yaml-paper = { id = "net.minecrell.plugin-yml.paper", version.ref = "plugin-yaml" }
+yaml-bukkit = { id = "net.minecrell.plugin-yml.bukkit", version.ref = "plugin-yaml" }
+run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-paper" }
+
+[bundles]
+nook-core = ["nook-core-config", "nook-core-database", "nook-core-logger"]

@@ -1,10 +1,10 @@
 plugins {
   id("java")
-  id("com.github.johnrengelman.shadow") version ("8.1.1")
-  id("org.ajoberstar.git-publish") version ("4.2.1")
-  id("org.ajoberstar.grgit") version ("5.2.2")
   id("maven-publish")
   id("java-library")
+  alias(libs.plugins.shadow)
+  alias(libs.plugins.git.publish)
+  alias(libs.plugins.grgit)
 }
 
 group = "com.nookure.core"
@@ -16,17 +16,18 @@ repositories {
 }
 
 dependencies {
-  api("io.pebbletemplates:pebble:3.2.2")
-  api("org.jetbrains:annotations:24.1.0")
-  api("jakarta.xml.bind:jakarta.xml.bind-api:4.0.2")
-  api("org.glassfish.jaxb:jaxb-runtime:4.0.5")
-  api("com.github.ben-manes.caffeine:caffeine:3.1.8")
-  compileOnly("com.mojang:authlib:3.17.30")
-
-  compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
-  testImplementation(platform("org.junit:junit-bom:5.10.0"))
-  testImplementation("com.google.code.gson:gson:2.11.0")
-  testImplementation("org.junit.jupiter:junit-jupiter")
+  api(libs.pebble)
+  api(libs.annotations)
+  api(libs.jakarta.xml.bind.api)
+  api(libs.jaxb.runtime)
+  api(libs.caffeine)
+  compileOnly(libs.authlib)
+  compileOnly(libs.paper.api)
+  api(libs.google.auto.service)
+  annotationProcessor(libs.google.auto.service)
+  testImplementation(platform(libs.junit.bom))
+  testImplementation(libs.gson)
+  testImplementation(libs.junit.jupiter)
 }
 
 tasks.test {
@@ -52,8 +53,8 @@ publishing {
   }
 
   java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
   }
 }
 
@@ -93,6 +94,6 @@ tasks {
   withType<Javadoc> {
     val o = options as StandardJavadocDocletOptions
     o.encoding = "UTF-8"
-    o.source = "17"
+    o.source = "21"
   }
 }
